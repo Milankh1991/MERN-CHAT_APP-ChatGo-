@@ -15,7 +15,7 @@ export const SocketContexProvider = ({children}) =>{
 
   useEffect(() => {
     if(authUser){
-      const socket = io("http://localhost:5000", {
+      const socket = io("https://gochat-g7b1.onrender.com", {
         query:{
           userId: authUser.id
         }
