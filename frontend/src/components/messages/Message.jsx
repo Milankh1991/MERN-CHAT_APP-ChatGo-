@@ -1,17 +1,30 @@
-const Message = () => {
+import { useAuthContext } from "../../context/AuthContext";
+import { extractTime } from "../../utils/extractTime";
+import useConversation from "../../zustand/useConversation";
+
+
+const Message = ({message}) => {
+  
+  const {authUser} = useAuthContext();
+  const { selectedConversation } = useConversation();
+	const fromMe = message.senderId === authUser.id;
+	const formattedTime = extractTime(message.createdAt);
+	const chatClassName = fromMe ? "chat-end" : "chat-start";
+	const profilePic = fromMe ? authUser.profilePic : selectedConversation?.profilePic;
+	const bubbleBgColor = fromMe ? "bg-blue-500" : "";
   return (
-    <div className="chat chat-end">
+    <div className={`chat ${chatClassName}`}>
       
       <div className="chat-image avatar">
         <div className="w-10 rounded-full">
-          <img src='https://cdn1.iconfinder.com/data/icons/ui-essential-17/32/UI_Essential_Outline_1_essential-app-ui-avatar-profile-user-account-512.png' a
+          <img src={profilePic}
           alt="Talwind CSS chat bubble component"/>
         </div>
       </div>
-      <div className={`chat-bubble text-white bg-blue-500`}>Hi Wilson! What's up?</div>
-      <div className="chat-footer opacity-50 text-xs flex gap-1 items-center">12:42</div>
+      <div className={`chat-bubble text-white ${bubbleBgColor} p-2`}>{message.message}</div>
+      <div className="chat-footer opacity-50 text-xs flex gap-1 items-center">{formattedTime}</div>
     </div>
-  )
-}
+  );
+};
 
-export default Message
+export default Message;
